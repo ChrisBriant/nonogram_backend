@@ -1,0 +1,6 @@
+/media
+*.pyc
+latest.dump
+/events/migrations
+/accounts/migrations
+.env
