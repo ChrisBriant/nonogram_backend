@@ -11,7 +11,7 @@ import random
 
 def random_string(range_max,string=None,unique=False):
     if not string:
-        string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789?><.:;@#£$%^&*()'
+        string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789?><.:;@#()'
     random_string = ''
     for i in range(0,range_max):
         new_char = random.choice(string)
@@ -23,12 +23,14 @@ def random_string(range_max,string=None,unique=False):
     return random_string
 
 def get_results_for_word_length(word_length,words,special,combos):
-    if word_length == 9:
-        score = 150
-    else :
-        score = 0
-        for word in words:
-            if word in combos:
+    #Get only one instance of each word
+    unique_words = list(set(words))
+    score = 0
+    for word in unique_words:
+        if word in combos:
+            if word_length == 9:
+                score = 150
+            else:
                 if word.find(special) != -1:
                     score += word_length*2
                 else:
@@ -36,8 +38,8 @@ def get_results_for_word_length(word_length,words,special,combos):
     return {
         'result': {
             'score' : score,
-            'scoredWords' : [word for word in words if word in combos],
-            'unscoredWords' : [word for word in words if word not in combos],
+            'scoredWords' : [word for word in unique_words if word in combos],
+            'unscoredWords' : [word for word in unique_words if word not in combos],
             'wordsChecked' : words,
         }
     }
