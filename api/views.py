@@ -89,7 +89,7 @@ def get_nonogram(request):
 # If contains special character multiply by number of letters
 # If nine letter words score 150
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 @permission_classes([ValidApiKey])
 def score_word(request):
     #Get the nonogram
@@ -118,7 +118,6 @@ def score_word(request):
             'solution' : score_solution(nonogram.combos,special_letter),
         }
         for i in range(3,10):
-            print(i)
             result = get_results_for_word_length(i,[word for word in word_list if len(word) == i],special_letter,nonogram.combos)
             payload['result'][str(i)+'letter'] = result['result']
             payload['totalScore'] += result['result']['score']
@@ -128,7 +127,7 @@ def score_word(request):
     return Response(payload, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 @permission_classes([ValidApiKey])
 def get_solution(request):
     try:
@@ -139,7 +138,7 @@ def get_solution(request):
     return Response(NonogramSerializer(nonogram).data, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 @permission_classes([ValidApiKey])
 def get_solution_with_score(request):
     try:
@@ -156,6 +155,5 @@ def get_solution_with_score(request):
         'word' : nonogram.word,
         'solution' : score_solution(nonogram.combos,special_letter)
     }
-    print(response_data)
     return Response(response_data, status=status.HTTP_200_OK)
 
